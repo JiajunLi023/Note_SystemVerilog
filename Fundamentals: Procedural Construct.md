@@ -133,3 +133,59 @@ end
 > For example: ``timescale 1ns / 1ps`  
 >precision = 1ns / 1ps = 10^3  
 >so #10.21 = #10.21, #10.231 = #10.231, #10.2356 = #10.236  
+
+### The Parameter of Generating Clock
+>1.frequence  
+>2.duty cycle = ton / (ton + toff)  
+>3.phase
+```
+`timescale 1ns / 1ps
+
+module tb();
+  reg clk;
+  reg clk50;
+  
+  initial begin
+    clk = 0;
+    clk50 = 0;
+  end
+  
+  always #5 clk = ~clk;
+  
+  real phase;
+  real ton;
+  real toff;
+  
+  task ParameterGen(input real phasein, period, dutyCycle, output real phase, ton, toff); //define a  function to calculate the phase, ton and toff
+    phase = phasein;
+    ton = period * dutyCycle;
+    toff = period - ton;
+  endtask
+  
+  task ClkGen(input real phase, ton, toff);   //define a function to generate the clk
+    @(posedge clk);
+    #phase;
+    while(1) begin
+      clk50 = 1;
+      #ton;
+      clk50 = 0;
+      #toff;
+    end
+  endtask
+  
+  initial begin
+    ParameterGen(0, 40, 0.4, phase, ton, toff);  // use the functions
+    ClkGen(phase, ton, toff);
+  end
+  
+  initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars;
+  end
+  
+  initial begin 
+    #200;
+    $finish();
+  end
+endmodule
+```
