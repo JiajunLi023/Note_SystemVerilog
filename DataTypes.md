@@ -4,6 +4,8 @@
 >>2. Continuous Assignment -> wire  
 **reg is used in begin...end and wire use for assign**  
 **reg表示存储结构，net表示导线结构，当不知道使用哪个时可以使用 logic type. However,logic只适用于单驱动端口,多驱动时，like inout， we use wire.**  
+![微信图片_20220815201343](https://user-images.githubusercontent.com/96273504/185232215-08824020-d419-475c-99b1-ba1f9004b594.jpg)
+
 >2. Variable
 >>1. Fixed Variable -> 2 states(0,1) and 4 states(0,1,x,z)
 >>>2 states
